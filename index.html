@@ -152,6 +152,71 @@
         #submit-btn:hover {
             opacity: 0.9;
         }
+        .result-container {
+            display: none;
+            background: white;
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        .mbti-type {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #3498db;
+            margin: 20px 0;
+        }
+        .type-description {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .dimension-scores {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .dimension {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .dimension-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .dimension-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .dimension-progress {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .restart-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -164,7 +229,7 @@
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
-        <div class="progress-text" id="progress-text">进度: 1/4</div>
+        <div class="progress-text" id="progress-text">进度: 1/20</div>
 
         <div class="question-container" id="question-container">
             <div class="question-number" id="question-number">题目 1</div>
@@ -176,62 +241,140 @@
             </div>
             <button id="submit-btn">提交测试，查看结果</button>
         </div>
+
+        <div class="result-container" id="result-container">
+            <h2 style="text-align: center; margin-bottom: 20px;">您的MBTI性格类型</h2>
+            <div class="mbti-type" id="mbti-result">INTJ</div>
+            
+            <div class="type-description" id="type-description">
+                您的性格类型描述将在这里显示...
+            </div>
+            
+            <div class="dimension-scores" id="dimension-scores">
+                <!-- 维度分数将通过JavaScript动态生成 -->
+            </div>
+            
+            <button class="restart-btn" id="restart-btn">重新开始测试</button>
+        </div>
     </div>
 
     <script>
-        // 测试题目数据
+        // 完整的20道MBTI测试题目
         const questions = [
-            {
-                text: "在社交聚会中，你通常：",
-                dimension: "EI",
-                options: [
-                    { text: "主动与陌生人交谈，认识新朋友", value: "E" },
-                    { text: "只与熟悉的人交流，或独自安静待着", value: "I" }
-                ]
-            },
-            {
-                text: "你更倾向于：",
-                dimension: "SN",
-                options: [
-                    { text: "关注具体事实和实际细节", value: "S" },
-                    { text: "关注整体模式和未来可能性", value: "N" }
-                ]
-            },
-            {
-                text: "做决定时，你更注重：",
-                dimension: "TF",
-                options: [
-                    { text: "逻辑分析和客观标准", value: "T" },
-                    { text: "个人价值观和他人感受", value: "F" }
-                ]
-            },
-            {
-                text: "你的生活方式更偏向：",
-                dimension: "JP",
-                options: [
-                    { text: "有计划、有条理，喜欢提前安排", value: "J" },
-                    { text: "灵活、随性，喜欢保持开放性", value: "P" }
-                ]
-            }
+            { text: "在社交聚会中，你通常：", dimension: "EI", options: [
+                { text: "主动与陌生人交谈，认识新朋友", value: "E" },
+                { text: "只与熟悉的人交流，或独自安静待着", value: "I" }
+            ]},
+            { text: "你更倾向于：", dimension: "SN", options: [
+                { text: "关注具体事实和实际细节", value: "S" },
+                { text: "关注整体模式和未来可能性", value: "N" }
+            ]},
+            { text: "做决定时，你更注重：", dimension: "TF", options: [
+                { text: "逻辑分析和客观标准", value: "T" },
+                { text: "个人价值观和他人感受", value: "F" }
+            ]},
+            { text: "你的生活方式更偏向：", dimension: "JP", options: [
+                { text: "有计划、有条理，喜欢提前安排", value: "J" },
+                { text: "灵活、随性，喜欢保持开放性", value: "P" }
+            ]},
+            { text: "当你需要充电时，你倾向于：", dimension: "EI", options: [
+                { text: "与他人相处，参加社交活动", value: "E" },
+                { text: "独处，进行安静的个人活动", value: "I" }
+            ]},
+            { text: "学习新东西时，你更喜欢：", dimension: "SN", options: [
+                { text: "按部就班，掌握具体技能", value: "S" },
+                { text: "理解概念，探索多种可能性", value: "N" }
+            ]},
+            { text: "面对批评时，你更在意：", dimension: "TF", options: [
+                { text: "批评是否有道理和逻辑", value: "T" },
+                { text: "批评是否公平和顾及感受", value: "F" }
+            ]},
+            { text: "处理工作时，你倾向于：", dimension: "JP", options: [
+                { text: "提前规划，按时完成", value: "J" },
+                { text: "在压力下工作，灵活调整", value: "P" }
+            ]},
+            { text: "在团队中，你通常：", dimension: "EI", options: [
+                { text: "积极发言，表达观点", value: "E" },
+                { text: "先倾听思考，再选择性发言", value: "I" }
+            ]},
+            { text: "你更相信：", dimension: "SN", options: [
+                { text: "实际经验和验证过的方法", value: "S" },
+                { text: "直觉和创新的想法", value: "N" }
+            ]},
+            { text: "处理冲突时，你更注重：", dimension: "TF", options: [
+                { text: "事实真相和公平原则", value: "T" },
+                { text: "人际关系和谐", value: "F" }
+            ]},
+            { text: "面对截止日期，你通常：", dimension: "JP", options: [
+                { text: "提前完成，留有余地", value: "J" },
+                { text: "利用最后时间高效完成", value: "P" }
+            ]},
+            { text: "你的能量主要来自：", dimension: "EI", options: [
+                { text: "与外界的互动和活动", value: "E" },
+                { text: "内心的思考和反思", value: "I" }
+            ]},
+            { text: "描述事物时，你更倾向于：", dimension: "SN", options: [
+                { text: "具体、准确的描述", value: "S" },
+                { text: "比喻、象征性的描述", value: "N" }
+            ]},
+            { text: "评价他人时，你更看重：", dimension: "TF", options: [
+                { text: "能力和成就", value: "T" },
+                { text: "人品和动机", value: "F" }
+            ]},
+            { text: "旅行时，你更喜欢：", dimension: "JP", options: [
+                { text: "详细的行程计划", value: "J" },
+                { text: "随性探索，灵活安排", value: "P" }
+            ]},
+            { text: "完成任务后，你倾向于：", dimension: "EI", options: [
+                { text: "立即开始新的社交或活动", value: "E" },
+                { text: "需要独处时间来恢复精力", value: "I" }
+            ]},
+            { text: "解决问题时，你更依赖：", dimension: "SN", options: [
+                { text: "过去的经验和已知方法", value: "S" },
+                { text: "新的思路和创意方案", value: "N" }
+            ]},
+            { text: "做出重要决定时，你主要考虑：", dimension: "TF", options: [
+                { text: "利弊分析和长远影响", value: "T" },
+                { text: "个人价值观和他人感受", value: "F" }
+            ]},
+            { text: "对于生活，你更倾向于：", dimension: "JP", options: [
+                { text: "有计划、可预测的生活方式", value: "J" },
+                { text: "充满变化和惊喜的生活方式", value: "P" }
+            ]}
         ];
 
-        // 初始化变量
+        // MBTI类型描述
+        const typeDescriptions = {
+            "INTJ": "建筑师 - 富有想象力和战略性的思想家。您喜欢理性分析，擅长制定长远计划，追求完美和创新。",
+            "INTP": "逻辑学家 - 创新发明家。您充满好奇心，喜欢理论思考，在理解复杂概念方面表现出色。",
+            "ENTJ": "指挥官 - 天生的领导者。您果断、有远见，善于组织和领导团队实现目标。",
+            "ENTP": "辩论家 - 聪明好奇的思想者。您机智、创新，喜欢智力挑战和探索新想法。",
+            "INFJ": "提倡者 - 安静而神秘的理想主义者。您富有洞察力，关心他人，追求意义和和谐。",
+            "INFP": "调停者 - 诗意善良的利他主义者。您敏感、有创意，重视个人价值观和 authenticity。",
+            "ENFJ": "主人公 - 富有魅力的激励者。您善于沟通，关心他人成长，是天生的导师。",
+            "ENFP": "竞选者 - 热情有创意的自由精神。您充满热情，善于发现可能性，激励他人。",
+            "ISTJ": "物流师 - 实际务实的事实主义者。您可靠、有条理，注重细节和传统。",
+            "ISFJ": "守卫者 - 专注温暖的保护者。您忠诚、体贴，善于照顾他人和维持和谐。",
+            "ESTJ": "总经理 - 出色的管理者。您务实、果断，善于建立秩序和实现目标。",
+            "ESFJ": "执政官 - 极有同情心的社交者。您友善、尽责，重视人际关系和团体和谐。",
+            "ISTP": "鉴赏家 - 大胆实用的实验者。您灵活、冷静，善于解决实际问题和应对危机。",
+            "ISFP": "探险家 - 灵活迷人的艺术家。您敏感、有创意，享受当下的美好体验。",
+            "ESTP": "企业家 - 聪明精力充沛的实干家。您机智、勇敢，善于把握机会和影响他人。",
+            "ESFP": "表演者 - 自发精力充沛的娱乐者。您活泼、热情，善于营造欢乐氛围和连接他人。"
+        };
+
         let currentQuestionIndex = 0;
         let userAnswers = new Array(questions.length).fill(null);
 
-        // 显示题目函数
         function showQuestion(index) {
             const question = questions[index];
             
-            // 更新题目信息
             document.getElementById('question-number').textContent = `题目 ${index + 1}`;
             document.getElementById('question-text').textContent = question.text;
             
-            // 清空选项容器
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             
-            // 创建选项
             question.options.forEach((option, optionIndex) => {
                 const optionElement = document.createElement('div');
                 optionElement.className = 'option';
@@ -243,17 +386,13 @@
                 optionsContainer.appendChild(optionElement);
             });
             
-            // 更新按钮状态
             updateButtonStates();
-            // 更新进度
             updateProgress();
         }
 
-        // 选择选项函数
         function selectOption(optionIndex) {
             userAnswers[currentQuestionIndex] = optionIndex;
             
-            // 更新选项样式
             const options = document.querySelectorAll('.option');
             options.forEach((option, index) => {
                 if (index === optionIndex) {
@@ -263,20 +402,16 @@
                 }
             });
             
-            // 启用下一题按钮
             document.getElementById('next-btn').disabled = false;
         }
 
-        // 更新按钮状态函数
         function updateButtonStates() {
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             const submitBtn = document.getElementById('submit-btn');
             
-            // 上一题按钮
             prevBtn.style.display = currentQuestionIndex === 0 ? 'none' : 'block';
             
-            // 下一题按钮
             if (currentQuestionIndex === questions.length - 1) {
                 nextBtn.style.display = 'none';
                 submitBtn.style.display = 'block';
@@ -285,18 +420,15 @@
                 submitBtn.style.display = 'none';
             }
             
-            // 禁用下一题按钮如果当前题目未答
             nextBtn.disabled = userAnswers[currentQuestionIndex] === null;
         }
 
-        // 更新进度函数
         function updateProgress() {
             const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
             document.getElementById('progress-text').textContent = `进度: ${currentQuestionIndex + 1}/${questions.length}`;
         }
 
-        // 上一题函数
         function goToPreviousQuestion() {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
@@ -304,7 +436,6 @@
             }
         }
 
-        // 下一题函数
         function goToNextQuestion() {
             if (currentQuestionIndex < questions.length - 1 && userAnswers[currentQuestionIndex] !== null) {
                 currentQuestionIndex++;
@@ -312,16 +443,13 @@
             }
         }
 
-        // 提交测试函数
         function submitTest() {
-            // 检查是否所有题目都已回答
             const unanswered = userAnswers.filter(answer => answer === null).length;
             if (unanswered > 0) {
                 alert(`您还有 ${unanswered} 道题目未完成！`);
                 return;
             }
             
-            // 计算MBTI类型
             const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
             
             userAnswers.forEach((answerIndex, questionIndex) => {
@@ -338,15 +466,65 @@
                 (scores.T >= scores.F ? 'T' : 'F') +
                 (scores.J >= scores.P ? 'J' : 'P');
             
-            alert(`测试完成！您的MBTI类型是：${mbtiType}\n\nE: ${scores.E} | I: ${scores.I}\nS: ${scores.S} | N: ${scores.N}\nT: ${scores.T} | F: ${scores.F}\nJ: ${scores.J} | P: ${scores.P}`);
+            showResults(mbtiType, scores);
         }
 
-        // 绑定事件监听器
+        function showResults(mbtiType, scores) {
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+            document.getElementById('progress-text').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            
+            document.getElementById('mbti-result').textContent = mbtiType;
+            document.getElementById('type-description').textContent = typeDescriptions[mbtiType] || "您的性格类型描述";
+            
+            // 显示维度分数
+            const dimensionScoresContainer = document.getElementById('dimension-scores');
+            dimensionScoresContainer.innerHTML = '';
+            
+            const dimensions = [
+                { name: "外向(E) - 内向(I)", eScore: scores.E, iScore: scores.I, eColor: "#e74c3c", iColor: "#3498db" },
+                { name: "实感(S) - 直觉(N)", eScore: scores.S, iScore: scores.N, eColor: "#e74c3c", iColor: "#3498db" },
+                { name: "思考(T) - 情感(F)", eScore: scores.T, iScore: scores.F, eColor: "#e74c3c", iColor: "#3498db" },
+                { name: "判断(J) - 感知(P)", eScore: scores.J, iScore: scores.P, eColor: "#e74c3c", iColor: "#3498db" }
+            ];
+            
+            dimensions.forEach(dim => {
+                const total = dim.eScore + dim.iScore;
+                const ePercent = total > 0 ? (dim.eScore / total) * 100 : 50;
+                
+                const dimensionElement = document.createElement('div');
+                dimensionElement.className = 'dimension';
+                dimensionElement.innerHTML = `
+                    <div class="dimension-name">${dim.name}</div>
+                    <div>${dim.eScore} : ${dim.iScore}</div>
+                    <div class="dimension-bar">
+                        <div class="dimension-progress" style="width: ${ePercent}%; background: linear-gradient(to right, ${dim.eColor}, ${dim.iColor});"></div>
+                    </div>
+                `;
+                dimensionScoresContainer.appendChild(dimensionElement);
+            });
+        }
+
+        function restartTest() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            
+            document.getElementById('result-container').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+            document.getElementById('progress-text').style.display = 'block';
+            document.querySelector('.progress-container').style.display = 'block';
+            
+            showQuestion(0);
+        }
+
+        // 绑定事件
         document.getElementById('prev-btn').addEventListener('click', goToPreviousQuestion);
         document.getElementById('next-btn').addEventListener('click', goToNextQuestion);
         document.getElementById('submit-btn').addEventListener('click', submitTest);
+        document.getElementById('restart-btn').addEventListener('click', restartTest);
 
-        // 初始化显示第一题
+        // 初始化
         showQuestion(0);
     </script>
 </body>
