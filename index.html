@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -462,7 +462,7 @@
                 text: "你的生活方式更偏向：", 
                 dimension: "JP",
                 options: [
-                    { text:有计划、有条理，喜欢提前安排", value: "J" },
+                    { text: "有计划、有条理，喜欢提前安排", value: "J" },
                     { text: "灵活、随性，喜欢保持开放性", value: "P" }
                 ]
             },
@@ -609,7 +609,7 @@
                     { name: "组织能力", value: "强" },
                     { name: "创新性", value: "很强" }
                 ],
-                careers: "适合领域：科研、技术、教育、法律、金融、管理咨询等。\n适合职业：科学家、工程师、律师、投资分析师、系统分析师、大学教授等。",
+                careers: "适合领域：科研、技术、教育、法律、金融、管理咨询等。适合职业：科学家、工程师、律师、投资分析师、系统分析师、大学教授等。",
                 relationships: "在人际关系中，INTJ倾向于深度而非广度的交往。他们珍视与理解他们复杂内心世界的人建立深厚联系，虽然外表可能显得冷静疏离，但对亲密关系非常忠诚和投入。"
             },
             "INTP": {
@@ -623,10 +623,24 @@
                     { name: "灵活性", value: "强" },
                     { name: "客观性", value: "很强" }
                 ],
-                careers: "适合领域：计算机技术、理论研究、学术领域、金融分析、法律分析等。\n适合职业：软件工程师、理论物理学家、数学家、哲学家、研究分析师等。",
+                careers: "适合领域：计算机技术、理论研究、学术领域、金融分析、法律分析等。适合职业：软件工程师、理论物理学家、数学家、哲学家、研究分析师等。",
                 relationships: "INTP在人际关系中重视智力上的共鸣，喜欢与能够激发他们思维的人交往。他们可能需要努力表达情感，但对亲密的人会展现出深刻的忠诚和独特的关怀方式。"
+            },
+            "ENTJ": {
+                title: "指挥官 - 大胆、富有想象力的领导者",
+                description: "ENTJ型的人是伟大的领导者和决策人。他们能轻易地看出事物具有的可能性，很高兴指导别人，使他们的想象成为现实。他们是头脑灵活、心胸宽阔、博览群书的人，好奇多问。",
+                traits: [
+                    { name: "领导力", value: "极强" },
+                    { name: "决断力", value: "很强" },
+                    { name: "战略思维", value: "强" },
+                    { name: "组织能力", value: "极强" },
+                    { name: "沟通能力", value: "很强" },
+                    { name: "执行力", value: "强" }
+                ],
+                careers: "适合领域：管理、商业、金融、咨询、政治、法律等。适合职业：CEO、项目经理、律师、管理顾问、政治家等。",
+                relationships: "ENTJ在人际关系中直接而坦诚，重视效率和目标的实现。他们欣赏有能力、有抱负的伙伴，并愿意为重要的人提供坚定的支持和指导。"
             }
-            // 其他14种类型的数据可以类似添加...
+            // 可以继续添加其他类型...
         };
 
         let currentQuestion = 0;
@@ -801,7 +815,7 @@
         // 显示结果
         function showResults() {
             const mbtiType = calculateMBTI();
-            const typeInfo = mbtiTypes[mbtiType] || mbtiTypes["INTJ"]; // 默认显示INTJ信息
+            const typeInfo = mbtiTypes[mbtiType] || mbtiTypes["INTJ"];
             
             // 更新MBTI类型显示
             document.getElementById('mbti-type').textContent = mbtiType;
@@ -898,32 +912,4 @@
                 
                 saveButtons.style.display = 'flex';
                 saveButton.disabled = false;
-                saveButton.textContent = '💾 保存报告图片';
-                loading.style.display = 'none';
-            });
-        }
-
-        // 重新测试
-        function newTest() {
-            if (confirm('确定要重新开始测试吗？当前结果将会丢失。')) {
-                currentQuestion = 0;
-                answers = new Array(questions.length).fill(null);
-                dimensionScores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
-                isMissingQuestionsMode = false;
-                missingQuestions = [];
-                
-                document.getElementById('question-container').style.display = 'block';
-                document.getElementById('result-container').style.display = 'none';
-                document.getElementById('progress-text').style.display = 'block';
-                document.querySelector('.progress-container').style.display = 'block';
-                
-                showQuestion(currentQuestion);
-                updateProgress();
-            }
-        }
-
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
+                saveButton
