@@ -5,78 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MBTI性格测试</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: Arial, sans-serif; 
-            background: #f5f7fa; 
-            padding: 20px; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container { max-width: 600px; margin: 0 auto; }
-        header { 
-            text-align: center; 
-            background: #3498db; 
-            color: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            margin-bottom: 20px; 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: #333;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .question-container { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
         }
-        .question { 
-            font-size: 18px; 
-            font-weight: bold; 
-            margin-bottom: 20px; 
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
         }
-        .options { display: flex; flex-direction: column; gap: 10px; }
-        .option { 
-            padding: 15px; 
-            background: #f8f9fa; 
-            border: 2px solid #e9ecef; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            text-align: center; 
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
-        .option.selected { 
-            background: #3498db; 
-            color: white; 
-            border-color: #2980b9; 
+        .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
-        .nav-buttons { 
-            display: flex; 
-            gap: 10px; 
-            margin-top: 20px; 
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
         }
-        button { 
-            flex: 1; 
-            padding: 12px; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
+        .progress-bar {
+            height: 6px;
+            background: linear-gradient(to right, #ff9a44, #ff6b6b);
+            border-radius: 8px;
+            transition: width 0.4s ease;
         }
-        #prev-btn { background: #95a5a6; color: white; }
-        #next-btn { background: #e74c3c; color: white; }
-        #submit-btn { 
-            display: none; 
-            width: 100%; 
-            background: #2ecc71; 
-            color: white; 
-            margin-top: 10px; 
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
         }
-        .progress { 
-            height: 6px; 
-            background: #ecf0f1; 
-            border-radius: 3px; 
-            margin: 10px 0; 
-            overflow: hidden; 
+        .question-container {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
         }
-        .progress-bar { 
-            height: 100%; 
-            background: #3498db; 
-            transition: width 0.3s; 
+        .question-number {
+            font-size: 0.9rem;
+            color: #3498db;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .option {
+            padding: 16px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #e9ecef;
+        }
+        .option.selected {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-color: #2980b9;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #prev-btn {
+            background-color: #95a5a6;
+            color: white;
+        }
+        #prev-btn:hover {
+            background-color: #7f8c8d;
+        }
+        #next-btn {
+            background: linear-gradient(135deg, #ff9a44, #ff6b6b);
+            color: white;
+        }
+        #next-btn:hover {
+            opacity: 0.9;
+        }
+        #next-btn:disabled {
+            background: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        #submit-btn {
+            display: none;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+        }
+        #submit-btn:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -84,117 +158,195 @@
     <div class="container">
         <header>
             <h1>MBTI性格测试</h1>
-            <p>探索真实的自己，发现性格优势</p>
+            <div class="subtitle">探索真实的自己，发现性格优势</div>
         </header>
 
-        <div class="progress">
-            <div class="progress-bar" id="progress-bar" style="width: 5%"></div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
         </div>
-        <div style="text-align: center; margin-bottom: 20px;">进度: <span id="progress-text">1/20</span></div>
+        <div class="progress-text" id="progress-text">进度: 1/4</div>
 
-        <div class="question-container">
-            <div class="question" id="question-text">题目加载中...</div>
+        <div class="question-container" id="question-container">
+            <div class="question-number" id="question-number">题目 1</div>
+            <div class="question-text" id="question-text"></div>
             <div class="options" id="options-container"></div>
             <div class="nav-buttons">
-                <button id="prev-btn">上一题</button>
-                <button id="next-btn">下一题</button>
+                <button class="nav-btn" id="prev-btn">上一题</button>
+                <button class="nav-btn" id="next-btn" disabled>下一题</button>
             </div>
-            <button id="submit-btn">提交测试</button>
+            <button id="submit-btn">提交测试，查看结果</button>
         </div>
     </div>
 
     <script>
-        // 测试题目
+        // 测试题目数据
         const questions = [
-            { text: "在社交聚会中，你通常：", dimension: "EI", options: [
-                { text: "主动与陌生人交谈，认识新朋友", value: "E" },
-                { text: "只与熟悉的人交流，或独自安静待着", value: "I" }
-            ]},
-            { text: "你更倾向于：", dimension: "SN", options: [
-                { text: "关注具体事实和实际细节", value: "S" },
-                { text: "关注整体模式和未来可能性", value: "N" }
-            ]},
-            { text: "做决定时，你更注重：", dimension: "TF", options: [
-                { text: "逻辑分析和客观标准", value: "T" },
-                { text: "个人价值观和他人感受", value: "F" }
-            ]},
-            { text: "你的生活方式更偏向：", dimension: "JP", options: [
-                { text: "有计划、有条理，喜欢提前安排", value: "J" },
-                { text: "灵活、随性，喜欢保持开放性", value: "P" }
-            ]}
+            {
+                text: "在社交聚会中，你通常：",
+                dimension: "EI",
+                options: [
+                    { text: "主动与陌生人交谈，认识新朋友", value: "E" },
+                    { text: "只与熟悉的人交流，或独自安静待着", value: "I" }
+                ]
+            },
+            {
+                text: "你更倾向于：",
+                dimension: "SN",
+                options: [
+                    { text: "关注具体事实和实际细节", value: "S" },
+                    { text: "关注整体模式和未来可能性", value: "N" }
+                ]
+            },
+            {
+                text: "做决定时，你更注重：",
+                dimension: "TF",
+                options: [
+                    { text: "逻辑分析和客观标准", value: "T" },
+                    { text: "个人价值观和他人感受", value: "F" }
+                ]
+            },
+            {
+                text: "你的生活方式更偏向：",
+                dimension: "JP",
+                options: [
+                    { text: "有计划、有条理，喜欢提前安排", value: "J" },
+                    { text: "灵活、随性，喜欢保持开放性", value: "P" }
+                ]
+            }
         ];
 
-        let currentQuestion = 0;
-        let answers = [];
+        // 初始化变量
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
 
+        // 显示题目函数
         function showQuestion(index) {
             const question = questions[index];
+            
+            // 更新题目信息
+            document.getElementById('question-number').textContent = `题目 ${index + 1}`;
             document.getElementById('question-text').textContent = question.text;
             
+            // 清空选项容器
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             
-            question.options.forEach((option, i) => {
+            // 创建选项
+            question.options.forEach((option, optionIndex) => {
                 const optionElement = document.createElement('div');
                 optionElement.className = 'option';
+                if (userAnswers[index] === optionIndex) {
+                    optionElement.classList.add('selected');
+                }
                 optionElement.textContent = option.text;
-                optionElement.onclick = () => selectOption(i);
+                optionElement.addEventListener('click', () => selectOption(optionIndex));
                 optionsContainer.appendChild(optionElement);
             });
             
+            // 更新按钮状态
+            updateButtonStates();
+            // 更新进度
             updateProgress();
-            updateButtons();
         }
 
+        // 选择选项函数
         function selectOption(optionIndex) {
-            answers[currentQuestion] = optionIndex;
-            const options = document.querySelectorAll('.option');
-            options.forEach((opt, i) => {
-                opt.classList.toggle('selected', i === optionIndex);
-            });
-            document.getElementById('next-btn').disabled = false;
+            userAnswers[currentQuestionIndex] = optionIndex;
             
-            // 自动跳转到下一题
-            setTimeout(() => {
-                if (currentQuestion < questions.length - 1) {
-                    currentQuestion++;
-                    showQuestion(currentQuestion);
+            // 更新选项样式
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                if (index === optionIndex) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
                 }
-            }, 300);
+            });
+            
+            // 启用下一题按钮
+            document.getElementById('next-btn').disabled = false;
         }
 
+        // 更新按钮状态函数
+        function updateButtonStates() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            // 上一题按钮
+            prevBtn.style.display = currentQuestionIndex === 0 ? 'none' : 'block';
+            
+            // 下一题按钮
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+            
+            // 禁用下一题按钮如果当前题目未答
+            nextBtn.disabled = userAnswers[currentQuestionIndex] === null;
+        }
+
+        // 更新进度函数
         function updateProgress() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progress-bar').style.width = progress + '%';
-            document.getElementById('progress-text').textContent = (currentQuestion + 1) + '/' + questions.length;
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `进度: ${currentQuestionIndex + 1}/${questions.length}`;
         }
 
-        function updateButtons() {
-            document.getElementById('prev-btn').style.display = currentQuestion === 0 ? 'none' : 'block';
-            document.getElementById('next-btn').style.display = currentQuestion === questions.length - 1 ? 'none' : 'block';
-            document.getElementById('submit-btn').style.display = currentQuestion === questions.length - 1 ? 'block' : 'none';
-            document.getElementById('next-btn').disabled = answers[currentQuestion] === undefined;
+        // 上一题函数
+        function goToPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
         }
 
-        document.getElementById('prev-btn').onclick = () => {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion(currentQuestion);
+        // 下一题函数
+        function goToNextQuestion() {
+            if (currentQuestionIndex < questions.length - 1 && userAnswers[currentQuestionIndex] !== null) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
             }
-        };
+        }
 
-        document.getElementById('next-btn').onclick = () => {
-            if (currentQuestion < questions.length - 1 && answers[currentQuestion] !== undefined) {
-                currentQuestion++;
-                showQuestion(currentQuestion);
+        // 提交测试函数
+        function submitTest() {
+            // 检查是否所有题目都已回答
+            const unanswered = userAnswers.filter(answer => answer === null).length;
+            if (unanswered > 0) {
+                alert(`您还有 ${unanswered} 道题目未完成！`);
+                return;
             }
-        };
+            
+            // 计算MBTI类型
+            const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            
+            userAnswers.forEach((answerIndex, questionIndex) => {
+                if (answerIndex !== null) {
+                    const question = questions[questionIndex];
+                    const selectedOption = question.options[answerIndex];
+                    scores[selectedOption.value]++;
+                }
+            });
+            
+            const mbtiType = 
+                (scores.E >= scores.I ? 'E' : 'I') +
+                (scores.S >= scores.N ? 'S' : 'N') +
+                (scores.T >= scores.F ? 'T' : 'F') +
+                (scores.J >= scores.P ? 'J' : 'P');
+            
+            alert(`测试完成！您的MBTI类型是：${mbtiType}\n\nE: ${scores.E} | I: ${scores.I}\nS: ${scores.S} | N: ${scores.N}\nT: ${scores.T} | F: ${scores.F}\nJ: ${scores.J} | P: ${scores.P}`);
+        }
 
-        document.getElementById('submit-btn').onclick = () => {
-            alert('测试完成！答案已记录。');
-        };
+        // 绑定事件监听器
+        document.getElementById('prev-btn').addEventListener('click', goToPreviousQuestion);
+        document.getElementById('next-btn').addEventListener('click', goToNextQuestion);
+        document.getElementById('submit-btn').addEventListener('click', submitTest);
 
-        // 初始化
+        // 初始化显示第一题
         showQuestion(0);
     </script>
 </body>
